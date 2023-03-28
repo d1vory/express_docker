@@ -27,10 +27,12 @@ jobs:
 #    needs: run-lint
 #    if: ${{ success() }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Build the Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
+#        uses: docker/build-push-action@v3
 #        with:
 #          context: .
-#        run: docker build . --file Dockerfile --tag node_devops_olexandr:"$(date +%s)"
+        with:
+          context: .
+        run: docker build . --file Dockerfile --tag node_devops_olexandr:"$(date +%s)"
