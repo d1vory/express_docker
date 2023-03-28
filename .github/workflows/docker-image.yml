@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Node.js project CI
 
 on:
   push:
@@ -7,12 +7,25 @@ on:
     branches: [ "main" ]
 
 jobs:
-
-  build:
-
+  run-lint:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+
+      - name: Lint Code Base
+        uses: github/super-linter@v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: "main"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build:
+    runs-on: ubuntu-latest
+    needs: linter_analysis
+    if: ${{ success() }}
+    steps:
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile --tag node_devops_olexandr:$(date +%s)
