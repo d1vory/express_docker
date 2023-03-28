@@ -39,4 +39,3 @@ jobs:
 
       - name: Push the Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
-# ttd
